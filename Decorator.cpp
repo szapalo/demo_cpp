@@ -3,7 +3,6 @@
 
 int fun(int a)
 {
-//    std::cout << "running fun :: " << a << std::endl;
    return a;
 }
 
@@ -92,7 +91,7 @@ int main(){
     for(int i=0; i<1000000; ++i){
         // decorated1(1);
         // decorated2(1);
-        decorated3(1);
+        decorated3(1); // fastest
 
     }
 

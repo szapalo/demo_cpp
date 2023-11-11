@@ -103,9 +103,7 @@ class PoolQueue{
             result = queue.back();
             queue.pop_back();
         }
-        // std::cout<<"release"<<std::endl;
         rlock.release();
-        // std::cout<<" after release"<<std::endl;
 
         return result;
     }
@@ -145,11 +143,7 @@ class PoolProcess{
     }
 
     void start(){
-        // std::cout<<"starting thread"<<std::endl;
-        // std::cout<<"set started to true"<<std::endl;
-        
         started = true;
-        // process_thread->detach();
     }
 
     void kill(){
@@ -165,27 +159,20 @@ class PoolProcess{
     bool join(){
         if(process_thread && process_thread->joinable()){
             process_thread->join();
-            // delete process_thread;
             return true;
         }
         return false;
     }
 
     static void _run(PoolProcess* pool_process){
-        // std::cout<<
-        //    "Running::"<<pool_process->killed
-        //    <<"::"<<pool_process->queue->empty()<<"--"<<std::endl;
+
         while(!pool_process->started && !pool_process->killed){
-            // std::cout<<(!pool_process->started)
-            // << " -- " << (!pool_process->killed)<<std::endl;
             std::this_thread::sleep_for(pool_process->wait_interval);
         }
-        // std::cout<<"BEGIN"<<std::endl;
 
         Method* method = nullptr;
         while(!(pool_process->killed)){
             method = pool_process->queue->pop();
-            // std::cout<<"POP->"<<method<<"<-"<<std::endl;
             if(method){
                 method->run(); 
                 delete method;
@@ -203,7 +190,6 @@ class Pool {
     PoolQueue queue;
     List<PoolProcess*> poolprocess_insts;
 
-    // Pool(int num_threads = 4 ){
     Pool(int num_threads = NUM_CORES){
         for(int i=0; i<num_threads; ++i){
             poolprocess_insts.append(new PoolProcess(&queue));
@@ -227,7 +213,6 @@ class Pool {
         for(auto& poolprocess : poolprocess_insts){
             finished &=(poolprocess->join());
         }
-        // finished ? break : std::this_thread::sleep_for(10); //milliseconds
     }
 
     void start_join(){
@@ -254,10 +239,6 @@ class Pool {
     void push(const std::function<void()>& f){
         queue.push(new Method(f));
     }
-
-    // void push(Method* method){
-    //     queue.push(method);
-    // }
 
 
 

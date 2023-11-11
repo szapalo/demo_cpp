@@ -2,8 +2,8 @@
 #ifndef NUNU_GROUP_H_
 #define NUNU_GROUP_H_
 
-#include "./List.cpp"
-#include "./Node.cpp"
+#include "./List.h"
+#include "./Node.h"
 
 // template <typename T>
 class Group{

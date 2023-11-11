@@ -442,153 +442,6 @@ class BaseNodeEncapGraph : public virtual BaseNodeGraph<NodeType, NodeID>{
 };
 
 
-
-
-// # NOTE : NODEID must NOT be 0 (zero/nullptr) 
-////////////////////////////////////////////////////////////////////////////////
-// template<typename NodeID>
-// class DirectionalNodeGraph{
-//     protected:
-//     DirectionalNodeGraph(){} //do nothing
-    
-//     class Node{
-//         public:
-//         NodeID id;
-//         Set<Node*> nodes;
-
-//         Node(NodeID id):id(id){
-//         }
-//     };
-
-//     virtual Node* _add_node(NodeID& node_id) {
-//         auto id_node_pair = node_map.find(node_id);
-//         Node* node_ptr;
-//         if(!id_node_pair){
-//             node_ptr = new Node(node_id);
-//             node_map[node_id] = node_ptr;
-//             nodes.insert(node_ptr);
-//         }
-//         else{
-//             node_ptr = id_node_pair->value;
-//         }
-//         return node_ptr; 
-//     }
-
-//     virtual void _add_edge(Node* first_node, Node* second_node){
-//         std::cout<<"add_edge_base"<<std::endl;
-//         first_node->nodes.insert(second_node);
-//     }
-
-//     void _init_(const std::initializer_list<GraphPair<NodeID,NodeID>>& init_list){
-//         auto it = init_list.begin();
-//         auto end_it = init_list.end();
-//         NodeID first_id;
-//         NodeID second_id;
-//         Node* first_node;
-//         Node* second_node;
-        
-//         while(it != end_it){
-//             first_id = it->first;
-//             second_id = it->second;
-//             first_node = _add_node(first_id);
-//             second_node = _add_node(second_id);
-//             _add_edge(first_node, second_node);
-//             ++it;
-//         }
-//     }
-//     public:
-    
-//     Set<Node*> nodes;
-//     Map<NodeID, Node*> node_map;
-
-//     DirectionalNodeGraph(
-//         const std::initializer_list<GraphPair<NodeID,NodeID>>& init_list){
-//         _init_(init_list);
-//     }
-
-// };
-
-// /////////////////////////////////////////////////////////////////////////////
-// template<typename NodeID>
-// class DirectionalNodeEdgeGraph : public DirectionalNodeGraph<NodeID>{
-//     protected:
-
-//     class Edge;
-//     class Node : public DirectionalNodeGraph<NodeID>::Node{
-//         public:
-//         Set<Edge*> edges;
-//     };
-
-//     class Edge : public GraphPair<Node*, Node*>{
-//         public:
-//         Edge(Node* n1, Node* n2) : GraphPair<Node*,Node*>(n1,n2){
-//             n1->edges.insert(this);
-//             std::cout<<"Edge"<<std::endl;
-//         }
-//     };
-
-//     void _add_edge(Node* first_node, Node* second_node) {
-//         std::cout<<"add_edge"<<std::endl;
-//         DirectionalNodeGraph<NodeID>::_add_edge(first_node, second_node);
-//         Edge* new_edge = new Edge(first_node, second_node);
-//         edges.insert(new_edge);
-//     }
-
-//     public:
-//     Set<Edge*> edges;
-
-//     DirectionalNodeEdgeGraph(
-//         const std::initializer_list<GraphPair<NodeID,NodeID>>& init_list
-//     ) : DirectionalNodeGraph<NodeID>(){
-//         // _init_(init_list);
-//     }
-
-// };
-
-////////////////////////////////////////////////////////////////////////////////
-// template<typename NodeID>
-// class NonDirectionalNodeGraph : public DirectionalNodeGraph<NodeID>{
-//     protected:
-//     class Node : public DirectionalNodeGraph<NodeID>{};
-//     class Edge : public DirectionalNodeGraph<NodeID>::Edge {
-//         Edge(Node* n1, Node* n2) : DirectionalNodeGraph<NodeID>::Edge(n1,n2){
-//             n2->edges.insert(this);
-//         }
-//     };
-
-//     void _add_edge(Node* first_node, Node* second_node) {
-//         DirectionalNodeGraph<NodeID>::_add_edge(first_node, second_node);
-//         std::cout<<"add edge"<<std::endl;
-//         second_node->nodes.insert(first_node);
-//     }
-//     public:
-//     NonDirectionalNodeGraph(
-//         const std::initializer_list<GraphPair<NodeID,NodeID>>& init_list
-//     ) : DirectionalNodeGraph<NodeID>(){
-//         DirectionalNodeGraph<NodeID>::_init_(init_list);
-//     }
-// };
-
-// /////////////////////////////////////////////////////////////////////////////
-// template<typename NodeID>
-// class NonDirectionalNodeEdgeGraph : public DirectionalNodeEdgeGraph<NodeID>{
-//     protected:
-//     class Edge;
-//     class Node : public DirectionalNodeEdgeGraph<NodeID>::Node {};
-
-//     class Edge : public DirectionalNodeEdgeGraph<NodeID>::Edge{
-//         public:
-//         Edge(Node* first_node, Node* second_node) : DirectionalNodeEdgeGraph<NodeID>::Edge(first_node, second_node){
-//             second_node->edges.insert(this);
-//         }
-//     };
-    
-//     void _add_edge(Node* first_node, Node* second_node) {
-//         DirectionalNodeEdgeGraph<NodeID>::_add_edge(first_node, second_node);        
-//         second_node->nodes.insert(first_node);
-//     }
-
-
 template<
     typename NodeType, typename EdgeType, typename NodeID, 
     typename NodeValue, typename EdgeValue
@@ -626,6 +479,7 @@ class BaseNodeEncapEdgeEncapGraph :
 
 
 ////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////// CONCRETE ///////////////////////////////////////
 
 template<typename NodeID=int>
 using NodeGraph = BaseNodeGraph<BaseNode<NodeID>, NodeID>;
@@ -645,28 +499,6 @@ using Graph = BaseNodeEncapEdgeEncapGraph<
                 BaseNodeEncapEdgeEncap<NodeID,V,E>, 
                 BaseEdge<BaseNodeEncapEdgeEncap<NodeID,V,E>,NodeID
               >, NodeID, V, E>;
-
-
-////////////////////////////////////////////////////////////////////////////////
-//
-// Directional
-
-// template<typename NodeID, typename Value>
-// class DirectionalNodeEncap : public BaseNodeEncap<NodeID, Value>{
-//     public:
-//     Set<DirectionalNodeEncap<NodeID,Value>*> input_nodes;
-//     Set<DirectionalNodeEncap<NodeID,Value>*> nodes;
-// };
-
-// template<
-//     typename NodeType, typename EdgeType, typename NodeID, 
-//     typename NodeValue, typename EdgeValue
-// >
-// class DirectionalGraph : public BaseNodeEncapEdgeEncapGraph<
-//                 BaseNodeEncapEdgeEncap<NodeID,V,E>, 
-//                 BaseEdge<BaseNodeEncapEdgeEncap<NodeID,V,E>,NodeID
-//               >, NodeID, V, E>
-
 
 
 #endif

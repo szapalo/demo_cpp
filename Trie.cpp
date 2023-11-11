@@ -1,6 +1,6 @@
 
 
-#include "String.h"
+#include "./String.h"
 
 class TrieNode
 
