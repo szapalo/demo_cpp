@@ -10,7 +10,7 @@
 
 namespace {
     template <typename K, typename T=K>
-    class BaseEquator{
+    class BaseEquator {
         public:
         static const bool equal(const K& k, const T& t ){
             return k==t;
@@ -62,7 +62,7 @@ class BaseUnorderedSet {
         typename LL::Node* next_node;
         size_t hash_val;
         for(int i=0; i<prev_size; ++i){
-            curr_node = _blocks[i].head;
+            curr_node = _blocks[i].get_head();
 
             while(curr_node){
                 hash_val = _hashing(
@@ -83,7 +83,7 @@ class BaseUnorderedSet {
     public:
 
     // public:
-    class Iterator{
+    class Iterator {
         private:
         LL* list_it;
         LL* end_it;        
@@ -105,9 +105,9 @@ class BaseUnorderedSet {
             if(!(linked_list_it.curr)){
                 do{
                     ++list_it;
-                }while(list_it != end_it && !(list_it->head));
+                }while(list_it != end_it && !(list_it->get_head()));
                 linked_list_it = (list_it != end_it)
-                    ? typename LL::Iterator(list_it->head)
+                    ? typename LL::Iterator(list_it->get_head())
                     : typename LL::Iterator(nullptr);
             }
         }
@@ -126,6 +126,10 @@ class BaseUnorderedSet {
 
         const T& operator*(){
             return (*linked_list_it);
+        }
+
+        const T* operator->(){
+            return linked_list_it;
         }
 
     };
@@ -154,7 +158,7 @@ class BaseUnorderedSet {
         typename LL::Node* curr_node = linked_list->find(key);
         if(!curr_node){
             linked_list->push_back(v);
-            curr_node = linked_list->tail;
+            curr_node = linked_list->get_tail();
             ++_size;
             if(_size > _capacity){
                 _expand();
@@ -175,17 +179,17 @@ class BaseUnorderedSet {
         }
     }
 
-    int length() const {
+    unsigned int length() const {
         return _size;
     }
 
     Iterator begin() const {
         LL* it = _blocks.begin();
         LL* end = _blocks.end();
-        while(it != end && !(it->head)){
+        while(it != end && !(it->get_head())){
             ++it;
         }
-        return (it != end) ? Iterator(it, end, it->head) : Iterator(end);
+        return (it != end) ? Iterator(it, end, it->get_head()) : Iterator(end);
     }
 
     Iterator end() const {

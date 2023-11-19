@@ -1,12 +1,12 @@
 #ifndef NUNU_DEQUE_H_
 #define NUNU_DEQUE_H_
 
-#include "List.h"
-#include "LinkedList.h"
+#include "./List.h"
+#include "./LinkedList.h"
 
 
 
-template<typename T>
+template <typename T>
 class Deque {
     /*
                  ---next--> 
@@ -63,6 +63,9 @@ class Deque {
         const T& operator*(){
             return *(*linked_it + idx);
         }
+        const T* operator->(){
+            return (*linked_it + idx);
+        }
     };
 
 
@@ -81,12 +84,12 @@ class Deque {
     }
 
     void _pop_back_block(){
-        free(linked_blocks.back());
+        delete linked_blocks.back();
         linked_blocks.pop_back();
     }
 
     void _pop_front_block(){
-        free(linked_blocks.front());
+        delete linked_blocks.front();
         linked_blocks.pop_front();
     }
 
@@ -101,14 +104,12 @@ class Deque {
     Deque(){}
 
     ~Deque(){
-        for(auto& elem : linked_blocks){
-            free(elem);
-        }
+        clear();
     }
 
     void clear(){
         for(auto& elem : linked_blocks){
-            free(elem);
+            delete elem;
         }
         _clear_members();
     }

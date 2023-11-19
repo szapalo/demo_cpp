@@ -1,7 +1,7 @@
 
 #ifndef NUNU_LINKEDLIST_H_
 #define NUNU_LINKEDLIST_H_
-
+// TODO: IMPLEMENT unsigned int length()
 #include <iostream>
 
 namespace DefaultComparators{
@@ -21,15 +21,20 @@ template <
     typename K, typename T=K,
     typename Comparator = DefaultComparators::Equator<K,T>
 >
-class BaseLinkedList{
+class BaseLinkedList {
     /*
                  ---next--> 
      (front) HEAD  ......  TAIL (back)    
                  <--prev--
      */
+    public:
+    class Node;
 
     private:
-    // Comparator comparator;
+    // unsigned int size = 0; //should this be implemented?
+    Node* head = nullptr; // front, contains prev data
+    Node* tail = nullptr; // back, contains next data
+
     public:
     
     class Node {
@@ -40,7 +45,7 @@ class BaseLinkedList{
         Node(const T data):data(data){}
     };
     
-    class Iterator {
+    class Iterator { //: public AbsIterator<T>{ TODO
         public:
         Node* curr;
         Iterator(Node* node):curr(node){}
@@ -56,12 +61,10 @@ class BaseLinkedList{
         const T& operator*(){
             return curr->data;
         }
+        const T* operator->(){
+            return &curr;
+        }
     };
-
-    int length = 0;
-    Node* head = nullptr; // front, contains prev data
-    Node* tail = nullptr; // back, contains next data
-
 
     BaseLinkedList(){}
 
@@ -145,6 +148,14 @@ class BaseLinkedList{
 
     T& back() const {
         return tail->data;
+    }
+
+    Node* get_head() const {
+        return head;
+    }
+
+    Node* get_tail() const {
+        return tail;
     }
 
     Node* find(const K& k) const{
